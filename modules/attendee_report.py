@@ -2,8 +2,8 @@ from pathlib import Path
 
 import pandas as pd
 
-from modules.elapsed_time import ElapsedTime
-from modules.pre_process import PreProcessor, PreProcessorImpl
+from .elapsed_time import ElapsedTime
+from .pre_process import PreProcessor, PreProcessorImpl
 
 
 class AttendeeReport:
