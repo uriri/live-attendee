@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pandas as pd
 
 from modules.elapsed_time import ElapsedTime
@@ -5,9 +7,9 @@ from modules.pre_process import PreProcessor, PreProcessorImpl
 
 
 class AttendeeReport:
-    def __init__(self, csv_file_name: str) -> None:
-        self.df = pd.read_csv(csv_file_name, encoding="utf_8_sig")
-        self.no = int(csv_file_name.split("_")[0])
+    def __init__(self, csv_file: Path) -> None:
+        self.df = pd.read_csv(csv_file, encoding="utf_8_sig")
+        self.no = int(csv_file.name.split("_")[0])
 
         self.output_df = pd.DataFrame(
             columns=[
@@ -60,11 +62,12 @@ def summary_attendee_reports(n: int):
 
 
 if __name__ == "__main__":
-    n = 23
-    read_report_name = f"{n}_AttendeeReport.csv"
-    attendee_report = AttendeeReport(read_report_name)
+    read_report_dir = Path("attendee_reports")
+    for report in read_report_dir.glob("*AttendeeReport.csv"):
+        attendee_report = AttendeeReport(report)
 
-    output_df = attendee_report.create_dataframe(PreProcessorImpl())
-    output_df.to_csv(f"{n}_視聴者一覧_.csv", encoding="utf_8_sig", index=False)
+        output_df = attendee_report.create_dataframe(PreProcessorImpl())
+        n = int(report.name.split("_")[0])
+        output_df.to_csv(f"{n}_視聴者一覧.csv", encoding="utf_8_sig", index=False)
 
     # summary_attendee_reports(n)
