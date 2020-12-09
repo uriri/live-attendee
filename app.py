@@ -39,7 +39,7 @@ class AttendeeReport:
 
             elapsed = ElapsedTime(join_time, left_time)
 
-            if elapsed.is_over_1_minute():
+            if elapsed.is_over_10_minute():
                 yield pd.Series(
                     [
                         self.no,

@@ -29,15 +29,15 @@ class TestElapsedTime(unittest.TestCase):
                 actual = elapsed_time.seconds
                 self.assertEqual(actual, expected)
 
-    def test_over_1_minutes(self):
-        test_ptn = [(0, False), (1, True)]
+    def test_over_10_minutes(self):
+        test_ptn = [(0, False), (9, False), (10, True)]
         for minutes, expected in test_ptn:
             with self.subTest(f"fail case minutes: {minutes}, expected: {expected}"):
                 start = datetime.strptime("12:00:00", "%H:%M:%S")
                 end = datetime.strptime(f"12:{minutes}:00", "%H:%M:%S")
 
                 elapsed_time = ElapsedTime(start=start, end=end)
-                actual = elapsed_time.is_over_1_minute()
+                actual = elapsed_time.is_over_10_minute()
                 self.assertEqual(actual, expected)
 
     def test_to_hhmm(self):

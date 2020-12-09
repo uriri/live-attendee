@@ -8,8 +8,8 @@ class ElapsedTime:
     def generate_hhmm(self) -> str:
         return ":".join([str(x).zfill(2) for x in [self.minutes, self.seconds]])
 
-    def is_over_1_minute(self) -> bool:
-        return self.minutes > 0
+    def is_over_10_minute(self) -> bool:
+        return self.minutes > 9
 
     @property
     def minutes(self) -> int:
