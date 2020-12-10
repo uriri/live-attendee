@@ -41,7 +41,6 @@ while True:
             output_df = attendee_target_file.create_dataframe(PreProcessorImpl())
             n = int(target_file.name.split("_")[0])
             output_df.to_csv(f"{n}_視聴者一覧.csv", encoding="utf_8_sig", index=False)
-    else:
-        print(event)
+        sg.popup("process complete!")
 
 window.close()
