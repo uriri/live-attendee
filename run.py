@@ -1,6 +1,7 @@
-import PySimpleGUI as sg
-
+import json
 from pathlib import Path
+
+import PySimpleGUI as sg
 
 from modules.attendee_report import AttendeeReport
 from modules.pre_process import PreProcessorImpl
@@ -14,6 +15,16 @@ def generate_target_files(select_file, select_folder):
             yield f
 
 
+def read_company_list():
+    try:
+        return json.load(open("company_domain.json", "r", encoding="utf-8"))
+    except FileNotFoundError:
+        print("company_domain.jsonを新規作成します")
+        with open("company_domain.json", "w", encoding="utf-8") as f:
+            f.write(json.dumps({}))
+        return dict()
+
+
 sg.theme("DarkBrown1")
 
 layout = [
@@ -24,6 +35,8 @@ layout = [
 ]
 
 window = sg.Window("sample", layout)
+
+company_domain = read_company_list()
 
 while True:
     event, values = window.read()
@@ -38,7 +51,8 @@ while True:
             print(target_file)
             attendee_target_file = AttendeeReport(target_file)
 
-            output_df = attendee_target_file.create_dataframe(PreProcessorImpl())
+            pre_processor = PreProcessorImpl(company_domain)
+            output_df = attendee_target_file.create_dataframe(pre_processor)
             n = int(target_file.name.split("_")[0])
             output_df.to_csv(f"{n}_視聴者一覧.csv", encoding="utf_8_sig", index=False)
         sg.popup("process complete!")

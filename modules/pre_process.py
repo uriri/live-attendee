@@ -1,6 +1,7 @@
-import pandas as pd
 from abc import ABC, abstractmethod
 from datetime import datetime, timedelta
+
+import pandas as pd
 
 
 class PreProcessor(ABC):
@@ -10,8 +11,11 @@ class PreProcessor(ABC):
 
 
 class PreProcessorImpl(PreProcessor):
+    def __init__(self, company_domain_dict):
+        self.company_domain_dict = company_domain_dict
+
     def execute(self, df: pd.DataFrame):
-        df = df.drop(columns=[" Participant Id", " UserAgent"])
+        df = df.drop(columns=[" UserAgent"])
 
         not_attendee_index = df.index[df[" Role"] != " Attendee"]
         df = df.drop(not_attendee_index).drop(columns=" Role")
@@ -20,17 +24,26 @@ class PreProcessorImpl(PreProcessor):
             lambda name: " ".join(name[1:].split(" ")[::-1])
         )
 
+        df[" Participant Id"] = df[" Participant Id"].apply(self.conv_to_company)
+
         df[" UTC Event Timestamp"] = df[" UTC Event Timestamp"].apply(_add_9_hours)
         df[" Action"] = df[" Action"].apply(lambda x: x[1:])
 
         df = df.rename(
             columns={
                 " Full Name": "Full Name",
+                " Participant Id": "Participant Id",
                 " UTC Event Timestamp": "Timestamp",
                 " Action": "Action",
             }
         )
         return df
+
+    def conv_to_company(self, address: str):
+        for key, company in self.company_domain_dict.items():
+            if key in address:
+                return company
+        return "unknown"
 
 
 def _add_9_hours(utc_timestamp: str):

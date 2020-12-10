@@ -3,7 +3,7 @@ from pathlib import Path
 import pandas as pd
 
 from .elapsed_time import ElapsedTime
-from .pre_process import PreProcessor, PreProcessorImpl
+from .pre_process import PreProcessor
 
 
 class AttendeeReport:
@@ -15,6 +15,7 @@ class AttendeeReport:
             columns=[
                 "No",
                 "氏名",
+                "所属",
                 "視聴日(yyyy/mm/dd)",
                 "視聴開始(hh:mm:ss)",
                 "視聴終了(hh:mm:ss)",
@@ -34,6 +35,8 @@ class AttendeeReport:
             full_name = row["Full Name"].iloc[0]
             # name_jp = " ".join(full_name.split(" ")[::-1])
 
+            company = row["Participant Id"].iloc[0]
+
             join_time = (row[row["Action"] == "Joined"])["Timestamp"].iloc[0]
             left_time = (row[row["Action"] == "Left"])["Timestamp"].iloc[0]
 
@@ -44,6 +47,7 @@ class AttendeeReport:
                     [
                         self.no,
                         full_name,
+                        company,
                         join_time.strftime("%Y/%m/%d"),
                         join_time.strftime("%H:%M:%S"),
                         left_time.strftime("%H:%M:%S"),
@@ -59,15 +63,3 @@ def summary_attendee_reports(n: int):
         with open(f"{n}_視聴者一覧.csv", encoding="utf_8_sig") as f:
             for row in f.readlines()[1:]:
                 summary.write(row)
-
-
-if __name__ == "__main__":
-    read_report_dir = Path("attendee_reports")
-    for report in read_report_dir.glob("*AttendeeReport.csv"):
-        attendee_report = AttendeeReport(report)
-
-        output_df = attendee_report.create_dataframe(PreProcessorImpl())
-        n = int(report.name.split("_")[0])
-        output_df.to_csv(f"{n}_視聴者一覧.csv", encoding="utf_8_sig", index=False)
-
-    # summary_attendee_reports(n)
