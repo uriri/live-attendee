@@ -16,10 +16,10 @@ class AttendeeReport:
                 "No",
                 "氏名",
                 "所属",
-                "視聴日(yyyy/mm/dd)",
-                "視聴開始(hh:mm:ss)",
-                "視聴終了(hh:mm:ss)",
-                "視聴時間(mm:ss)",
+                "視聴日",
+                "視聴開始時間",
+                "視聴終了時間",
+                "視聴時間",
             ]
         )
 
@@ -28,7 +28,7 @@ class AttendeeReport:
         for row in self.generate_groupby_session_id(pre_processed_df):
             self.output_df = self.output_df.append(row)
 
-        return self.output_df.sort_values(["視聴開始(hh:mm:ss)"])
+        return self.output_df.sort_values(["視聴開始時間"])
 
     def generate_groupby_session_id(self, df: pd.DataFrame):
         for session_id, row in df.groupby("Session Id"):
