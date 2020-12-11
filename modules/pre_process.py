@@ -24,7 +24,7 @@ class PreProcessorImpl(PreProcessor):
 
         df[" Participant Id"] = df[" Participant Id"].apply(self.conv_to_company)
 
-        df[" UTC Event Timestamp"] = df[" UTC Event Timestamp"].apply(_add_9_hours)
+        df[" UTC Event Timestamp"] = df[" UTC Event Timestamp"].apply(_to_jst_time)
         df[" Action"] = df[" Action"].apply(lambda x: x[1:])
 
         df = df.rename(
@@ -44,6 +44,14 @@ class PreProcessorImpl(PreProcessor):
         return "unknown"
 
 
-def _add_9_hours(utc_timestamp: str):
+def _to_jst_time(utc_timestamp: str):
+    """UTC時間をJST時間に変換
+
+    Args:
+        utc_timestamp (str): utc時間
+
+    Returns:
+        datetime: jst時間（utc + 9時間）
+    """
     utc_time = datetime.strptime(utc_timestamp, " %m/%d/%Y %I:%M:%S %p")
     return utc_time + timedelta(hours=+9)
