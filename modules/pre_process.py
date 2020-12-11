@@ -15,10 +15,8 @@ class PreProcessorImpl(PreProcessor):
         self.company_domain_dict = company_domain_dict
 
     def execute(self, df: pd.DataFrame):
-        df = df.drop(columns=[" UserAgent"])
-
         not_attendee_index = df.index[df[" Role"] != " Attendee"]
-        df = df.drop(not_attendee_index).drop(columns=" Role")
+        df = df.drop(not_attendee_index)
 
         df[" Full Name"] = df[" Full Name"].apply(
             lambda name: " ".join(name[1:].split(" ")[::-1])
@@ -37,7 +35,7 @@ class PreProcessorImpl(PreProcessor):
                 " Action": "Action",
             }
         )
-        return df
+        return df[["Session Id", "Full Name", "Participant Id", "Timestamp", "Action"]]
 
     def conv_to_company(self, address: str):
         for key, company in self.company_domain_dict.items():
