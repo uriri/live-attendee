@@ -60,3 +60,4 @@ class ReadAttendeeReportService:
             self.output_df.to_csv(
                 f"{attendee_report.no}_視聴者一覧.csv", encoding="utf_8_sig", index=False
             )
+            return self.output_df.itertuples()

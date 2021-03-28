@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<link href="https://fonts.googleapis.com/earlyaccess/mplus1p.css" rel="stylesheet" type="text/css">
+
+<div class="container">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="{{ url_for('attendee.home') }}">出席者記録</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="nav navbar-nav navbar-right">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('attendee.add_attendee') }}">登録</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-info" role="alert">
+        {{ message }}
+    </div>
+    {% endfor %}
+
+    <div class="body">
+        {% block body %}{% endblock %}
+    </div>
+
+</div>

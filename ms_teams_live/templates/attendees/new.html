@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<form action="{{ url_for('attendee.add_attendee') }}" method=post class=add-attendee>
+    <div class="form-group">
+        <label for="InputTitle">イベントタイトル</label>
+        <input type="text" class="form-control" id="title" name="title" />
+    </div>
+    <div class="form-group">
+        <label for="InputTitle">出席者一覧ファイル</label>
+        <input type="file" class="form-control" id="files" name="files" />
+    </div>
+    <div class="form-group">
+        <label for="InputTitle">ファイルの内容</label>
+        <textarea class="form-control" id="csv" name="csv"></textarea>
+    </div>
+    <button class="btn btn-primary" type="submit">登録</button>
+</form>
+
+<script>
+    var input_files = document.getElementById("files");
+    let reader = new FileReader();
+
+    input_files.addEventListener('change', () => {
+        for (row of input_files.files) {
+            reader.readAsText(row, 'UTF-8');
+            reader.onload = () => {
+                document.getElementById("csv").value = reader.result;
+            };
+        }
+    });
+</script>
+
+{% endblock %}
