@@ -65,6 +65,6 @@ def add_attendee():
     return redirect(url_for("attendee.home"))
 
 
-@attendee.route("/attendees", methods=["GET"])
+@attendee.route("/attendees/new", methods=["GET"])
 def new_attendee():
     return render_template("attendees/new.html")

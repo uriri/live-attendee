@@ -6,6 +6,7 @@
     <div class="card">
         <div class="card-body">
             <h5 class="card-title">{{ attendee.event_title }}</h5>
+            <a href="{{ url_for('attendee.show', event_title=attendee.event_title) }}" class="card-link">イベントの参加者</a>
         </div>
     </div>
     {% else %}
