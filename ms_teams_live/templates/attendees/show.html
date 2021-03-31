@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+{% block body %}
+
+<h1>{{ title }}</h1>
+
+<table class="table">
+
+    <thead>
+        <tr>
+            <th>氏名</th>
+            <th>視聴開始</th>
+            <th>視聴終了</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for attendee in attendees %}
+        <tr>
+            <td>{{ attendee.name }}</td>
+            <td>{{ attendee.join_timestamp }}</td>
+            <td>{{ attendee.left_timestamp }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+
+</table>
+
+{% endblock %}

@@ -68,3 +68,11 @@ def add_attendee():
 @attendee.route("/attendees/new", methods=["GET"])
 def new_attendee():
     return render_template("attendees/new.html")
+
+
+@attendee.route("/attendees/<string:event_title>", methods=["GET"])
+def show(event_title):
+    attendees = Attendee.query.filter_by(event_title=event_title).all()
+    return render_template(
+        "attendees/show.html", title=event_title, attendees=attendees
+    )
