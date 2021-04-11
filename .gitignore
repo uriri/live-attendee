@@ -1,4 +1,5 @@
 *.csv
+*.db
 company_domain.json
 
 # Byte-compiled / optimized / DLL files

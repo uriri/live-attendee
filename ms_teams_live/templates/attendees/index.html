@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<ul class="list-group list-group-flush">
+    {% for attendee in attendees %}
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">{{ attendee.event_title }}</h5>
+            <a href="{{ url_for('attendee.show', event_title=attendee.event_title) }}" class="card-link">イベントの参加者</a>
+        </div>
+    </div>
+    {% else %}
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">実施されたイベントはありません</h5>
+        </div>
+    </div>
+    {% endfor %}
+</ul>
+
+{% endblock %}
