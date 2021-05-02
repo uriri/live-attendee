@@ -1,14 +1,15 @@
+import csv
 import json
+from datetime import datetime
 from io import StringIO
 
 import pandas as pd
-from flask import Blueprint, redirect, render_template, request, url_for
+from flask import Blueprint, make_response, redirect, render_template, request, url_for
 from modules.application.read_attendee_report import ReadAttendeeReportService
 from modules.model.attendee_report import AttendeeReport
 from modules.pre_process import PreProcessorImpl
 from ms_teams_live import db
 from ms_teams_live.models.attendee import Attendee
-from datetime import datetime
 
 
 def read_company_list():
@@ -76,3 +77,23 @@ def show(event_title):
     return render_template(
         "attendees/show.html", title=event_title, attendees=attendees
     )
+
+
+@attendee.route("/download/csv/attendees/<string:event_title>", methods=["GET"])
+def download_csv(event_title):
+    f = StringIO()
+    writer = csv.writer(f, quotechar='"', quoting=csv.QUOTE_NONE, lineterminator="\n")
+
+    writer.writerow(["氏名", "視聴開始", "視聴終了"])
+    writer.writerows(
+        [
+            [a.name, a.join_timestamp, a.left_timestamp]
+            for a in Attendee.query.filter_by(event_title=event_title).all()
+        ]
+    )
+
+    response = make_response()
+    response.data = f.getvalue()
+    response.headers["Content-Type"] = "text/csv"
+    response.headers["Content-Disposition"] = f"attachment; filename={event_title}.csv"
+    return response
